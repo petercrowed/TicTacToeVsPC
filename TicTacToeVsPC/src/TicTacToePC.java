@@ -15,10 +15,10 @@ public class TicTacToePC {
 	private final int SIZE = 3;
 	private GridLayout experimentLayout;
 
+	public int pcMoveField;
 	public int number;
 	public int round = 0;
-	public ArrayList<Integer> mNumbers = new ArrayList<Integer>();
-	public ArrayList<String> fieldAndSymbol = new ArrayList<String>();
+	public int[] weights =new int[]{3,2,3,2,4,2,3,2,3};
 	public static final int CROSS = 1;
 	public static final int NOUGHT = 2;
 	public static int currentPlayer;
@@ -84,7 +84,7 @@ public class TicTacToePC {
 		}
 
 		for (int i = 0; i < 3; i++) {
-			System.out.println(i);
+
 			if (buttons[3 * i].getText() == "X" && buttons[3 * i + 1].getText() == "X"
 					&& buttons[3 * i + 2].getText() == "X") {
 
@@ -132,7 +132,7 @@ public class TicTacToePC {
 		}
 
 		for (int i = 0; i < 3; i++) {
-			System.out.println(i);
+	
 			if (buttons[3 * i].getText() == "O" && buttons[3 * i + 1].getText() == "O"
 					&& buttons[3 * i + 2].getText() == "O") {
 
@@ -164,8 +164,58 @@ public class TicTacToePC {
 	}
 
 
-//	public void pcTurn(String x, ActionEvent e) {
-//
+public int pcMove(){
+		int cell=0;
+		
+		
+	int max=Integer.MIN_VALUE;
+		
+		for(int i=0;i<weights.length;i++)
+			if(weights[i]>max)
+			{
+				max=weights[i];
+		
+				cell=i+1;
+			
+			}
+		
+		
+		int firstRandom = 3*((int)(Math.random()*2)+1);
+		int secondRandom = 3+2*(int)(Math.pow(-1, (int)(Math.random()*2)));
+
+		if(buttons[4].getText() == " ") 
+		{
+			cell=4;
+		}
+			
+		else
+		if ((buttons[0].getText() == "X" || buttons[5].getText() == "X") && buttons[2].getText() == " ") {
+			cell=2;
+			System.out.println("lol");
+		} else if ((buttons[2].getText() == "X" || buttons[7].getText() == "X") && buttons[8].getText() == " ") {
+			cell=8;
+		} else if ((buttons[6].getText() == "X" || buttons[1].getText() == "X") && buttons[0].getText() == " ") {
+			cell=0;
+		} else if ((buttons[0].getText() == "X" || buttons[8].getText() == "X") && buttons[firstRandom].getText() == " ") {
+			cell=firstRandom ;
+		}else if ((buttons[7].getText() == "X" || buttons[2].getText() == "X") && buttons[secondRandom].getText() == " ") {
+			cell=secondRandom;
+		}
+		
+	
+		System.out.println(cell);
+		return cell;
+	}
+	public void pcTurn(ActionEvent e) {
+		
+		pcMoveField = pcMove();
+
+		if (buttons[pcMoveField].getText() == " ") {
+			buttons[pcMoveField].setText("O");
+			buttons[pcMoveField].setEnabled(false);
+		}
+		
+		//
 //		// Blocking "X" for win on sides on the middle
 //		// Blocking "X" for win on Middle
 //		if (buttons[0][0].getText() == "X" && buttons[0][2].getText() == "X" && buttons[0][1].getText() == " ") {
@@ -331,9 +381,10 @@ public class TicTacToePC {
 //			buttons[2][2].setText("O");
 //			buttons[2][2].setEnabled(false);
 //		}
-//
-//	}
 
+	}
+
+	
 	public void addButtons(JPanel panel) {
 
 		// MagicNumbers();
@@ -367,11 +418,11 @@ public class TicTacToePC {
 							((AbstractButton) e.getSource()).setText("X");
 							((AbstractButton) e.getSource()).setEnabled(false);
 
-							System.out.println("X");
-							//pcTurn("O", e);
+					
+							pcTurn(e);
 
 							round++;
-							System.out.println("Round: " + round);
+					
 							if (round == 5) {
 								showDrawMessage();
 							}
